@@ -26,8 +26,7 @@
     debug:
       msg:
         - '{{ ansible_distribution }}'
-        - 'Processor = {{ ansible_processor[2] }}, Processor Cores = {{ ansible_processor_cores }}, Processor Count = {{ ansible_processor_count
- }}'
+        - 'Processor = {{ ansible_processor[2] }}, Processor Cores = {{ ansible_processor_cores }}, Processor Count = {{ ansible_processor_count}}'
         - 'Total Memory MB = {{ ansible_memtotal_mb }}'
         - 'C-Drive Size GB: {{ cdrive.output }}'
         #- ' C-Drive is {{ ansible_facts['devices']['C']['size'] }}"
