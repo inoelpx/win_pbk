@@ -1,26 +1,6 @@
-- hosts: platforms_windows_server
+- hosts: win_srvs
   gather_facts: true
-  tasks:
-############# Gather Facts #################### 
-  - name: Gather C-Drive
-    ansible.windows.win_powershell:
-     script: |
-      Get-Partition -DriveLetter C | Select-Object -ExpandProperty Size | ForEach-Object {[Math]::Ceiling($_ / 1GB)}
-    register: cdrive
-    tags: base
-    
-  - name: Gather SQL Version
-    ansible.windows.win_powershell:
-     script: |
-      $inst = (get-itemproperty 'HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server').InstalledInstances
-      foreach ($i in $inst)
-      {
-      $p = (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server\Instance Names\SQL').$i
-      (Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server\$p\Setup").Edition
-      (Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server\$p\Setup").PatchLevel
-      }
-    register: sqlversion
-    tags: sql     
+
 ###################WIN Version##################
   - name: Display Windows Base details
     debug:
@@ -31,14 +11,7 @@
         - 'C-Drive Size GB: {{ cdrive.output }}'
         #- ' C-Drive is {{ ansible_facts['devices']['C']['size'] }}"
     tags: base        
-    
-###################SQL Version##################   
-  - name: Print SQL 
-    ansible.builtin.debug:
-      msg: "Edition and Patchlevel: '{{ sqlversion.output }}'"
-    when: "'error' not in sqlversion.output"
-    tags: sql        
-
+         
 ################### Interfaces ##################
   - name: Display Interfaces
     debug:
