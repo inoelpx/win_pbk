@@ -1,0 +1,20 @@
+- hosts: win_srvs
+  gather_facts: true
+  tasks:
+############# Gather Facts ####################
+  - name: Gather C-Drive
+    ansible.windows.win_powershell:
+     script: |
+      Get-Partition -DriveLetter C | Select-Object -ExpandProperty Size | ForEach-Object {[Math]::Ceiling($_ / 1GB)}
+    register: cdrive
+    tags: base
+
+########## WSUS ###########################
+  - name: Set Group Policy
+    win_group_policy:
+      policy_id: SpecifyIntranetLocation
+      policy_type: Machine
+      state: enabled
+      registry_key: HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate
+      registry_value: WUServer
+      registry_data: http://10.16.0.33:8530
