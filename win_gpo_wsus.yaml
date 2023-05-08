@@ -1,0 +1,12 @@
+- name: Change "Specify Intranet Microsoft Update Service Location" Group Policy
+  hosts: win_srvs
+  gather_facts: false
+  tasks:
+    - name: Set Group Policy
+      win_group_policy:
+        policy_id: "SpecifyIntranetLocation"
+        policy_type: "Machine"
+        state: "enabled"
+        registry_key: "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
+        registry_value: "WUServer"
+        registry_data: "http://10.16.0.33:8530"
