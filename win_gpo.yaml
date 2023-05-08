@@ -11,7 +11,7 @@
 
 ########## WSUS ###########################
   - name: Set Group Policy
-    win_group_policy:
+    ansible.windows.win_group:
       policy_id: SpecifyIntranetLocation
       policy_type: Machine
       state: enabled
